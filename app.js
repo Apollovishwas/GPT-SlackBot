@@ -65,20 +65,18 @@ app.post('/ask',urlencodedParser,async function(req,res) {
 
 
 })
-////creating the context
-function create_prompt({ query, result }) {
-    const context = result.bits.map(chunk => chunk.text).join('\n');
-    return `Answer the question as truthfully as possible using the provided context, and if don't have the answer, say in a friendly tone that this Polymath instance does not contain the answer and suggest looking for this information elsewhere.\n\nContext:\n${context} \n\nQuestion:\n${query}\n\nAnswer:`;
-  }
+
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static("public"))
 
 app.use('/', indexRouter);
 app.use('/gpt', gptRouter);
 app.use('/users', usersRouter);
-
+app.listen(process.env.PORT || 3000, 
+	() => console.log("Server is running..."));
 module.exports = app;
